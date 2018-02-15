@@ -5,22 +5,18 @@ import re
 class StringCalculator:
     def __init__(self, numbers):
         self.numbers = numbers
-        self.result = 0
+        self.total = 0
 
     @staticmethod
     def add(string):
         calculator = StringCalculator(StringCalculator.split(string))
 
-        return calculator.get_result()
+        return calculator.calculate()
 
     @staticmethod
     def to_int(string):
         try:
-            number = int(string)
-            if number < 0:
-                raise NegativeNumbersNotAllowed
-
-            return number
+            return int(string)
         except ValueError:
             return 0
 
@@ -32,11 +28,18 @@ class StringCalculator:
 
         return re.split(delimiter + '|\n', string)
 
-    def get_result(self):
+    def calculate(self):
         for i in range(0, len(self.numbers)):
-            self.result += self.to_int(self.numbers[i])
+            number = self.to_int(self.numbers[i])
+            self.add_number(number)
 
-        return self.result
+        return self.total
+
+    def add_number(self, number):
+        if number < 0:
+            raise NegativeNumbersNotAllowed
+
+        self.total += number
 
 
 class NegativeNumbersNotAllowed(Exception):
